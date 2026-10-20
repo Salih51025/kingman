@@ -1,0 +1,1727 @@
+:root {
+  color-scheme: dark;
+  --ink: #e9ecf8;
+  --muted: #b7bdd4;
+  --bg: #12162b;
+  --panel: #16122a;
+  --accent: #d4a24c;
+  --accent-dim: #4a3f72;
+  --focus: #f3d27a;
+  --danger: #f0a3a3;
+  --form-bg: #141022;
+  --form-border: #5b4c7a;
+  --form-accent: #d4a24c;
+  --form-focus: #f3d27a;
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.scene {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 70% 12%, #3a2d68 0%, transparent 32%),
+    linear-gradient(#12162b, #1c1640 55%, #24183a);
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #f4f1e4;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.s1 { top: 12%; left: 14%; }
+.s2 { top: 18%; left: 72%; width: 2px; height: 2px; }
+.s3 { top: 8%; left: 46%; }
+.s4 { top: 26%; left: 88%; }
+.s5 { top: 22%; left: 30%; width: 2px; height: 2px; }
+
+.spark {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c9b26a;
+  opacity: 0.35;
+  animation: float 5s ease-in-out infinite;
+}
+
+.p1 { top: 34%; left: 20%; }
+.p2 { top: 42%; left: 78%; animation-delay: 1.2s; }
+.p3 { top: 16%; left: 58%; animation-delay: 2s; }
+
+.hills {
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  bottom: 18%;
+  height: 38%;
+  background:
+    radial-gradient(120% 90% at 20% 100%, #24304f 42%, transparent 43%),
+    radial-gradient(110% 80% at 70% 100%, #2b2150 46%, transparent 47%),
+    radial-gradient(90% 70% at 95% 100%, #1d2744 40%, transparent 41%);
+}
+
+.ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 12%;
+  background: linear-gradient(#2a2438, #1a1528);
+}
+
+.arena {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.arena-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.torch-flame {
+  transform: none;
+}
+
+.welcome {
+  background: rgba(18, 16, 36, 0.78);
+  border: 2px solid var(--accent);
+  color: var(--ink);
+}
+
+.lang-toggle,
+.battle-hud {
+  background: rgba(16, 14, 32, 0.86);
+  border: 2px solid var(--accent-dim);
+  color: var(--ink);
+}
+
+.welcome {
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0.55rem 1rem;
+  max-width: min(90vw, 28rem);
+  text-align: center;
+  border-radius: 14px;
+  animation: welcome-in 0.6s ease both;
+  z-index: 5;
+}
+
+.lang-toggle {
+  position: absolute;
+  top: 4%;
+  right: 4%;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+}
+
+.lang-toggle button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0.15rem 0.35rem;
+  border-radius: 6px;
+}
+
+.lang-toggle button[aria-pressed="true"] {
+  color: #22180a;
+  background: var(--accent);
+}
+
+.lang-toggle button:hover {
+  filter: brightness(1.08);
+}
+
+.lang-toggle button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.actor-stage {
+  position: absolute;
+  bottom: 18%;
+  left: -24%;
+  width: min(34vw, 210px);
+  z-index: 7;
+  pointer-events: none;
+}
+
+.actor-rig {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.actor-stage.phase-intro {
+  animation: walk-across 1.6s cubic-bezier(0.33, 0.82, 0.22, 1) forwards;
+}
+
+.actor-stage.phase-arrival,
+.actor-stage.phase-message,
+.actor-stage.phase-sword_raise,
+.actor-stage.phase-sword_slam,
+.actor-stage.phase-impact {
+  left: 38%;
+}
+
+.actor-stage.phase-rest,
+.actor-stage.phase-request_ready:not(.is-fighting):not(.jump-jump):not(.jump-land):not(.jump-ready) {
+  left: 46%;
+  bottom: 20%;
+  transform: translateX(-50%);
+}
+
+.actor-stage.jump-crouch {
+  left: 46%;
+  bottom: 20%;
+  transform: translateX(-50%);
+}
+
+.actor-stage.jump-jump {
+  animation: leap-to-arena 0.6s cubic-bezier(0.2, 0.7, 0.28, 1) forwards;
+}
+
+.actor-stage.jump-land,
+.actor-stage.jump-ready,
+.actor-stage.is-fighting,
+.actor-stage.ultimate-awaken,
+.actor-stage.ultimate-strike {
+  left: 20%;
+  bottom: 26%;
+  transform: none;
+  width: min(30vw, 190px);
+}
+
+.actor-stage.ultimate-return {
+  animation: return-to-center 0.7s ease-out forwards;
+}
+
+.actor-stage.ultimate-kneel,
+.actor-stage.ultimate-flower {
+  left: 50%;
+  bottom: 20%;
+  transform: translateX(-50%);
+}
+
+.knight-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 8px 0 rgba(5, 8, 7, 0.45));
+}
+
+.arm-l { transform-origin: 55px 94px; }
+.arm-sword { transform-origin: 128px 92px; }
+.gauntlet { transform-origin: 133px 128px; }
+.sword { transform-origin: 156px 128px; }
+.head { transform-origin: 92px 56px; }
+.cape { transform-origin: 86px 100px; }
+.scarf { transform-origin: 92px 96px; }
+.torso { transform-origin: 91px 114px; }
+.leg-l { transform-origin: 79px 148px; }
+.leg-r { transform-origin: 107px 148px; }
+.eye-l .lid { transform-origin: 82px 54px; transform: scaleY(0); }
+.eye-r .lid { transform-origin: 104px 54px; transform: scaleY(0); }
+.pupil { transform-box: fill-box; transform-origin: center; }
+
+.phase-intro .leg-l,
+.phase-intro .leg-r {
+  animation: stride 0.38s ease-in-out infinite;
+}
+
+.phase-intro .leg-r,
+.phase-intro .arm-l {
+  animation-delay: 0.19s;
+}
+
+.phase-intro .arm-l {
+  animation: arm-swing 0.38s ease-in-out infinite;
+}
+
+.phase-intro .knight-rig {
+  animation: step-bounce 0.38s ease-in-out infinite;
+}
+
+.phase-intro .cape,
+.phase-intro .scarf {
+  animation: cape-walk 0.38s ease-in-out infinite;
+}
+
+.phase-intro .torso {
+  animation: walk-torso 0.38s ease-in-out infinite;
+}
+
+.phase-intro .arm-sword {
+  animation: walk-guard 0.38s ease-in-out infinite;
+}
+
+.phase-sword_raise .arm-sword {
+  animation: raise-arm 0.7s ease forwards;
+}
+
+.phase-sword_raise .torso,
+.phase-sword_raise .head {
+  animation: windup-lean 0.7s ease forwards;
+}
+
+.phase-sword_slam .arm-sword,
+.phase-impact .arm-sword {
+  animation: slam-arm 0.4s ease forwards;
+}
+
+.phase-sword_slam .torso,
+.phase-impact .torso {
+  animation: slam-lean 0.4s ease forwards;
+}
+
+.actor-stage.phase-sword_slam .arm-sword,
+.actor-stage.phase-impact .arm-sword {
+  transform: rotate(70deg);
+}
+
+.actor-stage.phase-rest .arm-sword {
+  animation: retrieve-sword 0.7s ease forwards;
+}
+
+.actor-stage.jump-crouch .knight-rig {
+  animation: crouch-prep 0.22s ease forwards;
+}
+
+.actor-stage.jump-crouch .leg-l,
+.actor-stage.jump-crouch .leg-r {
+  animation: crouch-legs 0.22s ease forwards;
+}
+
+.actor-stage.jump-jump .knight-rig {
+  animation: jump-body 0.6s ease forwards;
+}
+
+.actor-stage.jump-jump .leg-l,
+.actor-stage.jump-jump .leg-r {
+  animation: tuck-legs 0.6s ease forwards;
+}
+
+.actor-stage.jump-jump .cape {
+  animation: cape-trail 0.6s ease forwards;
+}
+
+.actor-stage.jump-crouch .arm-sword,
+.actor-stage.jump-jump .arm-sword,
+.actor-stage.jump-land .arm-sword,
+.actor-stage.jump-ready .arm-sword {
+  transform: rotate(-12deg);
+}
+
+.actor-stage.jump-land .knight-rig {
+  animation: land-squash 0.22s ease;
+}
+
+.knight.is-idle .knight-rig {
+  animation: breathe 3.2s ease-in-out infinite;
+}
+
+.knight.is-idle .cape,
+.knight.is-idle .scarf {
+  animation: cape-idle 3.4s ease-in-out infinite;
+}
+
+.knight.is-idle .head {
+  animation: head-tilt 5.5s ease-in-out infinite;
+}
+
+.knight.is-idle .lid {
+  animation: blink 4.8s ease-in-out infinite;
+}
+
+.knight.is-idle .pupil {
+  animation: glance 6s ease-in-out infinite;
+}
+
+.knight.is-idle .arm-sword {
+  animation: idle-flourish 8s ease-in-out infinite;
+}
+
+.knight.is-idle .arm-l {
+  animation: idle-fist 8s ease-in-out infinite;
+}
+
+.knight.is-blocking {
+  animation: block-recoil 0.4s ease;
+}
+
+.knight.in-battle .arm-sword {
+  transform: rotate(-12deg);
+}
+
+.knight.is-attacking.hit-0 {
+  animation: slash-lunge 0.54s ease;
+}
+
+.knight.is-attacking.hit-1 {
+  animation: overhead-lunge 0.6s ease;
+}
+
+.knight.is-attacking.hit-2 {
+  animation: jump-strike 0.56s ease;
+}
+
+.knight.is-attacking.hit-0 .arm-sword {
+  animation: slash-arm 0.54s ease;
+}
+
+.knight.is-attacking.hit-1 .arm-sword {
+  animation: overhead-arm 0.6s ease;
+}
+
+.knight.is-attacking.hit-2 .arm-sword {
+  animation: jump-strike-arm 0.56s ease;
+}
+
+.knight.is-attacking.hit-0 .torso {
+  animation: slash-torso 0.54s ease;
+}
+
+.knight.is-attacking.hit-1 .torso {
+  animation: overhead-torso 0.6s ease;
+}
+
+.knight.is-attacking.hit-2 .leg-l,
+.knight.is-attacking.hit-2 .leg-r {
+  animation: tuck-legs 0.56s ease;
+}
+
+.slash-trail {
+  position: absolute;
+  right: -8%;
+  top: 38%;
+  width: 78px;
+  height: 18px;
+  border-radius: 40%;
+  background: linear-gradient(90deg, transparent, #f3ead2 40%, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.block-spark {
+  position: absolute;
+  right: 8%;
+  top: 42%;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f3ead2;
+  box-shadow: 0 0 12px #d4a24c;
+  animation: spark-pop 0.4s ease forwards;
+  pointer-events: none;
+}
+
+.enemy-spark {
+  position: absolute;
+  left: 8%;
+  top: 38%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #f3c56b;
+  box-shadow: 0 0 10px #d4a24c;
+  animation: spark-pop 0.45s ease forwards;
+  pointer-events: none;
+}
+
+.trail-0 {
+  animation: slash-arc 0.54s ease;
+}
+
+.trail-1 {
+  top: 22%;
+  width: 16px;
+  height: 70px;
+  animation: slash-drop 0.6s ease;
+}
+
+.trail-2 {
+  top: 28%;
+  transform: rotate(-32deg);
+  animation: slash-diag 0.56s ease;
+}
+
+.ground-ripple {
+  position: absolute;
+  left: 58%;
+  bottom: 8%;
+  width: 28px;
+  height: 10px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  animation: ripple 0.45s ease-out forwards;
+}
+
+.landing-dust span {
+  position: absolute;
+  bottom: 6%;
+  left: 42%;
+  width: 8px;
+  height: 8px;
+  background: #d4a24c;
+  border-radius: 50%;
+  animation: dust 0.45s ease-out forwards;
+}
+
+.landing-dust span:nth-child(2) { left: 58%; }
+.landing-dust span:nth-child(3) { left: 30%; }
+
+.impact {
+  position: absolute;
+  left: 50%;
+  bottom: 22%;
+  transform: translateX(-50%);
+  z-index: 4;
+}
+
+.impact span {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #d4a24c;
+  border-radius: 50%;
+  animation: dust 0.5s ease-out forwards;
+}
+
+.impact span:nth-child(2) { left: 16px; animation-delay: 0.04s; }
+.impact span:nth-child(3) { left: -18px; animation-delay: 0.08s; }
+
+.is-shaking {
+  animation: shake 0.28s linear;
+}
+
+.speech-bubble {
+  position: absolute;
+  left: 50%;
+  bottom: 92%;
+  width: min(78vw, 230px);
+  margin: 0;
+  padding: 0.55rem 0.7rem;
+  transform: translateX(-50%);
+  background: #f4efe4;
+  color: #2a2238;
+  border: 2px solid #1c2240;
+  border-radius: 14px;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  z-index: 8;
+  pointer-events: none;
+  animation: bubble-in 0.45s ease both;
+}
+
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  width: 12px;
+  height: 12px;
+  background: #f4efe4;
+  border-right: 2px solid #1c2240;
+  border-bottom: 2px solid #1c2240;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.speech-bubble.idle {
+  animation: bubble-in 0.45s ease both, bubble-float 3.4s ease-in-out 0.45s infinite;
+}
+
+.speech-bubble.battle {
+  bottom: 100%;
+  animation: bubble-in 0.4s ease both, bubble-out 0.45s ease 3.3s forwards;
+}
+
+.speech-bubble.victory {
+  bottom: 108%;
+  width: min(78vw, 210px);
+  font-weight: 700;
+  animation: bubble-in 0.35s ease both;
+}
+
+.monster-row {
+  position: absolute;
+  left: 36%;
+  right: 4%;
+  bottom: 24%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 0.9rem;
+  z-index: 7;
+  pointer-events: none;
+}
+
+.monster {
+  width: 168px;
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+.monster.is-tough {
+  width: 208px;
+}
+
+.monster.is-striking.kind-goblin {
+  animation: goblin-lunge 0.55s ease;
+}
+
+.monster.is-striking.kind-flyer {
+  animation: flyer-dive 0.55s ease;
+}
+
+.monster.is-striking.kind-slime {
+  animation: slime-pounce 0.55s ease;
+}
+
+.monster-art {
+  position: relative;
+}
+
+.monster.is-focused:not(.is-defeated) {
+  transform: translateX(-6px);
+}
+
+.monster.is-hit {
+  animation: recoil 0.42s ease;
+}
+
+.monster.kind-slime.is-hit .monster-body {
+  animation: slime-squash 0.42s ease;
+}
+
+.monster.kind-flyer.is-hit {
+  animation: flyer-recoil 0.42s ease;
+}
+
+.monster.kind-goblin.is-hit {
+  animation: goblin-stumble 0.42s ease;
+}
+
+.monster.kind-slime:not(.is-defeated):not(.is-hit) .monster-body {
+  animation: slime-idle 2.4s ease-in-out infinite;
+}
+
+.monster.kind-goblin:not(.is-defeated):not(.is-hit) .monster-body {
+  animation: goblin-idle 2.8s ease-in-out infinite;
+}
+
+.monster.is-defeated {
+  animation: defeat-fall 0.55s ease forwards;
+}
+
+.slash {
+  position: absolute;
+  left: 16%;
+  top: 30%;
+  width: 64px;
+  height: 8px;
+  background: #f3ead2;
+  border-radius: 99px;
+  transform: rotate(-28deg);
+  animation: slash-pop 0.28s ease forwards;
+}
+
+.slash-1 {
+  width: 10px;
+  height: 58px;
+  left: 40%;
+  transform: none;
+}
+
+.slash-2 {
+  transform: rotate(-48deg);
+}
+
+.slash-ultimate {
+  background: #ff6b8a;
+  width: 72px;
+  height: 10px;
+}
+
+.monster-name {
+  margin: 0 0 0.2rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.monster-svg {
+  width: 160px;
+  height: 148px;
+}
+
+.monster.is-tough .monster-svg {
+  width: 198px;
+  height: 180px;
+}
+
+.flyer-svg {
+  animation: hover 2.4s ease-in-out infinite;
+}
+
+.flyer-svg .wing-l {
+  transform-origin: 24px 60px;
+  animation: flap 2.4s ease-in-out infinite;
+}
+
+.flyer-svg .wing-r {
+  transform-origin: 136px 60px;
+  animation: flap 2.4s ease-in-out infinite reverse;
+}
+
+.kind-slime .m-arm-l { transform-origin: 20px 79px; }
+.kind-slime .m-arm-r { transform-origin: 130px 79px; }
+.kind-slime .m-leg-l { transform-origin: 54px 100px; }
+.kind-slime .m-leg-r { transform-origin: 94px 100px; }
+
+.kind-flyer .m-arm-l { transform-origin: 46px 77px; }
+.kind-flyer .m-arm-r { transform-origin: 114px 77px; }
+.kind-flyer .m-leg-l { transform-origin: 66px 98px; }
+.kind-flyer .m-leg-r { transform-origin: 94px 98px; }
+
+.kind-goblin .m-arm-l { transform-origin: 30px 74px; }
+.kind-goblin .m-arm-r { transform-origin: 120px 70px; }
+.kind-goblin .m-leg-l { transform-origin: 54px 96px; }
+.kind-goblin .m-leg-r { transform-origin: 94px 96px; }
+
+.kind-slime:not(.is-defeated):not(.is-hit) .m-leg-l,
+.kind-slime:not(.is-defeated):not(.is-hit) .m-leg-r {
+  animation: slime-step 1.2s ease-in-out infinite;
+}
+
+.kind-slime:not(.is-defeated):not(.is-hit) .m-leg-r {
+  animation-delay: 0.6s;
+}
+
+.kind-slime.is-striking .m-arm-l,
+.kind-slime.is-striking .m-arm-r {
+  animation: slime-arm-swing 0.55s ease;
+}
+
+.kind-flyer:not(.is-defeated) .m-leg-l,
+.kind-flyer:not(.is-defeated) .m-leg-r {
+  animation: flyer-dangle 2s ease-in-out infinite;
+}
+
+.kind-goblin:not(.is-defeated):not(.is-hit) .m-arm-r {
+  animation: goblin-weapon 2.6s ease-in-out infinite;
+}
+
+.kind-goblin.is-striking .m-arm-r {
+  animation: goblin-swing 0.55s ease;
+}
+
+.hp-bar {
+  height: 9px;
+  margin-top: 0.2rem;
+  background: #141022;
+  border: 2px solid #5b4c7a;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.hp-bar span {
+  display: block;
+  height: 100%;
+  background: #d4a24c;
+  transition: width 0.25s ease;
+}
+
+.battle-hud {
+  position: absolute;
+  top: 4%;
+  left: 4%;
+  width: min(92vw, 280px);
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  z-index: 5;
+}
+
+.hud-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.battle-hud h2 {
+  margin: 0.2rem 0 0.45rem;
+  font-size: 1.05rem;
+}
+
+.hud-log,
+.hud-result,
+.hint {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.wish-form {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  transform: translateX(-50%);
+  width: min(92vw, 420px);
+  padding: 0.9rem;
+  border-radius: 16px;
+  z-index: 6;
+  animation: reveal 0.45s ease both;
+  background: rgba(28, 22, 58, 0.88);
+  border: 2px solid var(--form-border);
+  color: var(--ink);
+  box-shadow: 0 10px 28px rgba(8, 6, 18, 0.42);
+  pointer-events: auto;
+  transition: width 0.28s ease, padding 0.28s ease, bottom 0.28s ease;
+}
+
+.wish-form.is-collapsed {
+  width: min(72vw, 220px);
+  padding: 0.4rem 0.75rem;
+  bottom: 1.2%;
+  z-index: 5;
+}
+
+.scene.is-ultimate .wish-form.is-expanded {
+  width: min(92vw, 340px);
+  bottom: 1%;
+  max-height: 28vh;
+  overflow: auto;
+}
+
+.wish-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.wish-toggle:focus-visible {
+  outline: 3px solid var(--form-focus);
+  outline-offset: 2px;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hamburger i {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: var(--form-accent);
+}
+
+.ghost-toggle {
+  width: auto;
+  margin-bottom: 0.35rem;
+}
+
+.wish-form label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 700;
+  color: #f3ead2;
+}
+
+.wish-form textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 72px;
+  padding: 0.65rem;
+  color: var(--ink);
+  background: rgba(14, 12, 28, 0.92);
+  border: 2px solid var(--form-border);
+  border-radius: 10px;
+  font: inherit;
+}
+
+.wish-form textarea::placeholder {
+  color: #9aa3c4;
+}
+
+.wish-form textarea:focus {
+  border-color: var(--form-focus);
+  outline: 2px solid rgba(243, 210, 122, 0.35);
+  outline-offset: 1px;
+}
+
+.wish-form button:focus-visible {
+  outline: 3px solid var(--form-focus);
+  outline-offset: 2px;
+}
+
+.wish-form .hint {
+  color: #9aa3c4;
+}
+
+.form-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.wish-form button {
+  appearance: none;
+  border: 0;
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem;
+  min-height: 44px;
+  background: var(--form-accent);
+  color: #22180a;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.wish-form button:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.wish-form button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.wish-form button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.wish-form button.ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 2px solid var(--form-border);
+}
+
+.wish-form .wish-toggle,
+.wish-form button.wish-toggle {
+  background: transparent;
+  color: var(--ink);
+  padding: 0.35rem 0.2rem;
+}
+
+.wish-form .wish-toggle:hover:not(:disabled) {
+  filter: none;
+  color: var(--form-focus);
+}
+
+.form-error {
+  margin: 0.4rem 0 0;
+  color: var(--danger);
+}
+
+@keyframes walk-across {
+  from { left: -24%; }
+  to { left: 38%; }
+}
+
+@keyframes leap-to-arena {
+  0% { left: 46%; bottom: 20%; transform: translateX(-50%) translateY(8px); }
+  42% { left: 34%; bottom: 42%; transform: translateX(-30%) translateY(-54px); }
+  100% { left: 20%; bottom: 26%; transform: translateX(0) translateY(0); }
+}
+
+@keyframes return-to-center {
+  from { left: 20%; bottom: 26%; transform: none; }
+  to { left: 50%; bottom: 20%; transform: translateX(-50%); }
+}
+
+@keyframes stride {
+  0%, 100% { transform: rotate(16deg); }
+  50% { transform: rotate(-16deg); }
+}
+
+@keyframes walk-torso {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(3deg) translateY(-2px); }
+}
+
+@keyframes walk-guard {
+  0%, 100% { transform: rotate(-10deg); }
+  50% { transform: rotate(4deg); }
+}
+
+@keyframes arm-swing {
+  0%, 100% { transform: rotate(-16deg); }
+  50% { transform: rotate(16deg); }
+}
+
+@keyframes step-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes cape-walk {
+  0%, 100% { transform: rotate(6deg); }
+  50% { transform: rotate(-8deg); }
+}
+
+@keyframes welcome-in {
+  from { opacity: 0; transform: translate(-50%, 12px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes raise-arm {
+  to { transform: rotate(-78deg); }
+}
+
+@keyframes raise-sword {
+  to { transform: rotate(-18deg); }
+}
+
+@keyframes windup-lean {
+  to { transform: rotate(-8deg); }
+}
+
+@keyframes slam-arm {
+  from { transform: rotate(-78deg); }
+  to { transform: rotate(70deg); }
+}
+
+@keyframes slam-sword {
+  from { transform: rotate(-18deg); }
+  to { transform: rotate(32deg); }
+}
+
+@keyframes slam-lean {
+  from { transform: rotate(-8deg); }
+  to { transform: rotate(6deg); }
+}
+
+@keyframes crouch-prep {
+  to { transform: translateY(10px) scaleY(0.9); }
+}
+
+@keyframes crouch-legs {
+  to { transform: rotate(18deg); }
+}
+
+@keyframes jump-body {
+  0% { transform: translateY(10px) scaleY(0.9); }
+  28% { transform: translateY(-22px) rotate(-6deg); }
+  62% { transform: translateY(-18px) rotate(-2deg); }
+  100% { transform: translateY(0) rotate(3deg); }
+}
+
+@keyframes tuck-legs {
+  0% { transform: rotate(18deg); }
+  40% { transform: rotate(-28deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes cape-trail {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(18deg); }
+  100% { transform: rotate(-6deg); }
+}
+
+@keyframes retrieve-sword {
+  from { transform: rotate(70deg); }
+  to { transform: rotate(-12deg); }
+}
+
+@keyframes land-squash {
+  0% { transform: translateY(-6px); }
+  40% { transform: translateY(8px) scaleY(0.88); }
+  100% { transform: translateY(0) scaleY(1); }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes cape-idle {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-4deg); }
+}
+
+@keyframes head-tilt {
+  0%, 40%, 100% { transform: rotate(0deg); }
+  55% { transform: rotate(-5deg); }
+  70% { transform: rotate(4deg); }
+}
+
+@keyframes blink {
+  0%, 88%, 100% { transform: scaleY(0); }
+  92% { transform: scaleY(1); }
+}
+
+@keyframes glance {
+  0%, 18%, 100% { transform: translate(0, 0); }
+  28% { transform: translate(2px, 2px); }
+  48%, 62% { transform: translate(0, 0); }
+  72% { transform: translate(-1.5px, 1px); }
+}
+
+@keyframes idle-flourish {
+  0%, 14%, 36%, 100% { transform: rotate(-10deg); }
+  24% { transform: rotate(-48deg); }
+}
+
+@keyframes idle-fist {
+  0%, 42%, 62%, 100% { transform: rotate(6deg); }
+  50% { transform: rotate(-32deg); }
+}
+
+@keyframes block-recoil {
+  40% { transform: translateX(-12px) rotate(-6deg); }
+  100% { transform: none; }
+}
+
+@keyframes spark-pop {
+  0% { opacity: 1; transform: scale(0.4); }
+  55% { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 0; transform: scale(0.7) translateX(-8px); }
+}
+
+@keyframes goblin-lunge {
+  35% { transform: translateX(-42px); }
+  100% { transform: none; }
+}
+
+@keyframes flyer-dive {
+  40% { transform: translate(-48px, 8px); }
+  100% { transform: none; }
+}
+
+@keyframes slime-pounce {
+  18% { transform: scale(1.12, 0.72); }
+  48% { transform: translateX(-46px) translateY(-18px); }
+  100% { transform: none; }
+}
+
+@keyframes slash-lunge {
+  0% { transform: translateX(0); }
+  22% { transform: translateX(-16px) rotate(-6deg); }
+  50% { transform: translateX(34px) rotate(8deg); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes overhead-lunge {
+  0% { transform: translateX(0); }
+  24% { transform: translateX(-8px) translateY(6px); }
+  55% { transform: translateX(28px) translateY(4px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes jump-strike {
+  0% { transform: translateX(0) translateY(0); }
+  28% { transform: translateX(-6px) translateY(-28px); }
+  58% { transform: translateX(30px) translateY(6px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+
+@keyframes slash-arm {
+  0% { transform: rotate(-22deg); }
+  22% { transform: rotate(-88deg); }
+  50% { transform: rotate(72deg); }
+  100% { transform: rotate(-22deg); }
+}
+
+@keyframes overhead-arm {
+  0% { transform: rotate(-22deg); }
+  28% { transform: rotate(-110deg); }
+  55% { transform: rotate(58deg); }
+  100% { transform: rotate(-22deg); }
+}
+
+@keyframes jump-strike-arm {
+  0% { transform: rotate(-22deg); }
+  28% { transform: rotate(-70deg); }
+  58% { transform: rotate(64deg); }
+  100% { transform: rotate(-22deg); }
+}
+
+@keyframes slash-torso {
+  0%, 100% { transform: rotate(0deg); }
+  22% { transform: rotate(-10deg); }
+  50% { transform: rotate(12deg); }
+}
+
+@keyframes overhead-torso {
+  0%, 100% { transform: rotate(0deg); }
+  28% { transform: rotate(-12deg); }
+  55% { transform: rotate(10deg); }
+}
+
+@keyframes slash-arc {
+  0%, 20% { opacity: 0; transform: scaleX(0.2) rotate(-8deg); }
+  48% { opacity: 0.9; transform: scaleX(1.2) rotate(8deg); }
+  100% { opacity: 0; }
+}
+
+@keyframes slash-drop {
+  0%, 24% { opacity: 0; transform: scaleY(0.2); }
+  55% { opacity: 0.9; transform: scaleY(1.1); }
+  100% { opacity: 0; }
+}
+
+@keyframes slash-diag {
+  0%, 24% { opacity: 0; }
+  58% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+@keyframes dust {
+  to { transform: translateY(-18px) translateX(8px); opacity: 0; }
+}
+
+@keyframes ripple {
+  to { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes shake {
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+@keyframes hover {
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes flap {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-16deg); }
+}
+
+@keyframes slime-idle {
+  50% { transform: scale(1.06, 0.94); }
+}
+
+@keyframes goblin-idle {
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes recoil {
+  30% { transform: translateX(14px); filter: brightness(1.35); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes slime-squash {
+  30% { transform: scale(1.28, 0.62); }
+  60% { transform: scale(0.86, 1.16) translateX(12px); }
+  100% { transform: scale(1); }
+}
+
+@keyframes flyer-recoil {
+  30% { transform: translate(14px, -14px) rotate(12deg); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes goblin-stumble {
+  25% { transform: translateX(10px) rotate(10deg); }
+  55% { transform: translateX(18px) rotate(-6deg); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes defeat-fall {
+  to {
+    opacity: 0.18;
+    transform: translateY(28px) rotate(18deg) scale(0.82);
+  }
+}
+
+@keyframes slash-pop {
+  0% { opacity: 1; transform: rotate(-28deg) scaleX(0.2); }
+  40% { opacity: 1; transform: rotate(-28deg) scaleX(1); }
+  100% { opacity: 0; transform: rotate(-28deg) translateX(10px); }
+}
+
+@keyframes bubble-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes bubble-float {
+  50% { transform: translate(-50%, -4px); }
+}
+
+@keyframes bubble-out {
+  to { opacity: 0; transform: translate(-50%, -8px); }
+}
+
+.ultimate-veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 8, 16, 0.28);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.crimson-aura span {
+  position: absolute;
+  left: 38%;
+  top: 18%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff6b8a;
+  animation: dust 0.8s ease-out infinite;
+}
+
+.crimson-aura span:nth-child(2) { left: 58%; animation-delay: 0.15s; }
+.crimson-aura span:nth-child(3) { left: 48%; top: 40%; animation-delay: 0.28s; }
+
+.crimson-arc {
+  position: absolute;
+  left: 40%;
+  top: 28%;
+  width: 220px;
+  height: 70px;
+  border: 4px solid #ff4d73;
+  border-left: 0;
+  border-bottom: 0;
+  border-radius: 0 80px 0 0;
+  opacity: 0;
+  animation: crimson-sweep 0.7s ease forwards;
+  pointer-events: none;
+}
+
+.knight.ultimate-awaken .arm-sword {
+  transform: rotate(-40deg);
+}
+
+.knight.ultimate-strike {
+  animation: slash-lunge 0.7s ease;
+}
+
+.knight.ultimate-strike .arm-sword {
+  animation: slash-arm 0.7s ease;
+}
+
+.knight.ultimate-kneel .knight-rig,
+.knight.ultimate-flower .knight-rig {
+  transform: translateY(16px);
+}
+
+.knight.ultimate-kneel .leg-r,
+.knight.ultimate-flower .leg-r {
+  transform: rotate(-72deg) translate(10px, 16px);
+}
+
+.knight.ultimate-kneel .leg-l,
+.knight.ultimate-flower .leg-l {
+  transform: rotate(16deg) translate(10px, 2px);
+}
+
+.knight.ultimate-kneel .arm-sword {
+  transform: rotate(48deg);
+}
+
+.knight.ultimate-flower .arm-sword {
+  transform: rotate(-18deg);
+}
+
+.offered-flower {
+  transform-origin: 150px 118px;
+}
+
+.knight.ultimate-kneel .offered-flower {
+  transform: scale(0.2);
+  opacity: 0.15;
+}
+
+.knight.ultimate-flower .offered-flower {
+  animation: bloom 0.45s ease both;
+}
+
+.knight.ultimate-kneel .sword,
+.knight.ultimate-flower .sword,
+.knight.celebrate-plant .sword,
+.knight.celebrate-raise .sword,
+.knight.celebrate-leap .sword,
+.knight.celebrate-land .sword {
+  opacity: 0;
+}
+
+.knight[class*="celebrate-"] .arm-l,
+.knight[class*="celebrate-"] .arm-sword,
+.knight[class*="celebrate-"] .leg-l,
+.knight[class*="celebrate-"] .leg-r {
+  transition: transform 0.32s ease;
+}
+
+.knight.celebrate-plant .arm-sword {
+  transform: rotate(52deg);
+}
+
+.knight.celebrate-raise .arm-l,
+.knight.celebrate-leap .arm-l,
+.knight.celebrate-land .arm-l {
+  transform: rotate(-148deg);
+}
+
+.knight.celebrate-raise .arm-sword,
+.knight.celebrate-leap .arm-sword,
+.knight.celebrate-land .arm-sword {
+  transform: rotate(-128deg);
+}
+
+.knight.celebrate-leap .leg-l,
+.knight.celebrate-leap .leg-r {
+  transform: rotate(-16deg);
+}
+
+.actor-stage.celebrate-leap .actor-rig {
+  animation: victory-leap 0.52s ease;
+}
+
+.knight.celebrate-land .knight-rig {
+  animation: land-squash 0.28s ease;
+}
+
+.knight.celebrate-recover .arm-l {
+  transform: rotate(8deg);
+}
+
+.knight.celebrate-recover .arm-sword {
+  animation: retrieve-sword 0.5s ease forwards;
+}
+
+.victory-heart {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 40px;
+  height: 36px;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 0 8px rgba(228, 91, 124, 0.45));
+  animation: heart-in 0.35s ease both, heart-pulse 0.9s ease-in-out 0.35s infinite;
+  z-index: 7;
+  pointer-events: none;
+}
+
+@keyframes crimson-sweep {
+  0% { opacity: 0; transform: scaleX(0.2) rotate(-8deg); }
+  40% { opacity: 1; transform: scaleX(1) rotate(6deg); }
+  100% { opacity: 0; transform: scaleX(1.2) translateX(24px); }
+}
+
+@keyframes grow-stem {
+  from { stroke-dasharray: 80; stroke-dashoffset: 80; }
+  to { stroke-dasharray: 80; stroke-dashoffset: 0; }
+}
+
+@keyframes bloom {
+  from { transform: scale(0.2); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes victory-leap {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(-36px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes heart-in {
+  from { opacity: 0; transform: translateX(-50%) scale(0.4); }
+  to { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes heart-pulse {
+  50% { transform: translateX(-50%) scale(1.08); }
+}
+
+@keyframes float {
+  50% { transform: translateY(-8px); opacity: 0.55; }
+}
+
+@keyframes slime-step {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(-10deg) translateY(-6px); }
+}
+
+@keyframes slime-arm-swing {
+  30% { transform: rotate(-28deg); }
+  60% { transform: rotate(18deg); }
+  100% { transform: none; }
+}
+
+@keyframes flyer-dangle {
+  50% { transform: rotate(8deg); }
+}
+
+@keyframes goblin-weapon {
+  50% { transform: rotate(-10deg); }
+}
+
+@keyframes goblin-swing {
+  35% { transform: rotate(-42deg); }
+  100% { transform: none; }
+}
+
+@media (max-width: 720px) {
+  .actor-stage.jump-land,
+  .actor-stage.jump-ready,
+  .actor-stage.is-fighting,
+  .actor-stage.ultimate-awaken,
+  .actor-stage.ultimate-strike,
+  .actor-stage.celebrate-plant,
+  .actor-stage.celebrate-raise,
+  .actor-stage.celebrate-leap,
+  .actor-stage.celebrate-land,
+  .actor-stage.celebrate-recover {
+    left: 2%;
+    width: 112px;
+    bottom: 34%;
+  }
+
+  .monster-row {
+    left: 28%;
+    right: 1%;
+    bottom: 34%;
+    gap: 0.25rem;
+  }
+
+  .monster {
+    width: 96px;
+  }
+
+  .monster.is-tough {
+    width: 110px;
+  }
+
+  .monster-svg,
+  .monster.is-tough .monster-svg {
+    width: 92px;
+    height: 86px;
+  }
+
+  .victory-heart {
+    width: 32px;
+    height: 28px;
+    top: 4%;
+  }
+
+  .speech-bubble {
+    width: min(70vw, 190px);
+    font-size: 0.78rem;
+  }
+
+  .battle-hud {
+    width: min(92vw, 100%);
+    left: 4%;
+    right: 4%;
+    top: 10%;
+  }
+
+  .lang-toggle {
+    top: 2%;
+    right: 2%;
+  }
+
+  .welcome {
+    top: 16%;
+    font-size: 0.95rem;
+  }
+
+  .wish-form.is-expanded {
+    width: min(94vw, 420px);
+    max-height: min(38vh, 260px);
+    overflow: auto;
+    bottom: max(8px, env(safe-area-inset-bottom));
+  }
+
+  .wish-form textarea {
+    min-height: 56px;
+  }
+
+  .actor-stage.ultimate-kneel,
+  .actor-stage.ultimate-flower {
+    bottom: 28%;
+  }
+
+  .pillar,
+  .arena-wall {
+    display: none;
+  }
+}
+
+@media (max-width: 430px) {
+  .welcome { max-width: 88vw; font-size: 0.9rem; }
+  .battle-hud { padding: 0.6rem 0.75rem; }
+}
+
+@media (max-width: 375px) {
+  .actor-stage.jump-land,
+  .actor-stage.jump-ready,
+  .actor-stage.is-fighting,
+  .actor-stage.ultimate-awaken,
+  .actor-stage.ultimate-strike {
+    width: 98px;
+    left: 1%;
+  }
+
+  .monster {
+    width: 84px;
+  }
+
+  .monster-svg,
+  .monster.is-tough .monster-svg {
+    width: 80px;
+    height: 74px;
+  }
+}
+
+@media (max-width: 320px) {
+  .lang-toggle { padding: 0.2rem 0.35rem; }
+  .actor-stage.is-fighting { width: 88px; }
+  .monster-row { left: 26%; }
+  .wish-form.is-collapsed { width: min(84vw, 200px); }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .welcome { display: none; }
+  .battle-hud { top: 2%; width: min(46vw, 240px); font-size: 0.8rem; }
+  .actor-stage.phase-rest,
+  .actor-stage.phase-request_ready:not(.is-fighting) {
+    bottom: 14%;
+  }
+  .actor-stage.is-fighting { bottom: 18%; width: 90px; }
+  .monster-row { bottom: 16%; }
+  .wish-form { max-height: 42vh; overflow: auto; }
+}
+
+.dev-panel {
+  min-height: 100vh;
+  padding: 4.5rem 1rem 2rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.dev-head h1 { margin: 0.2rem 0 0.6rem; }
+
+.dev-login {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  width: min(100%, 420px);
+}
+
+.dev-login input {
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 0.7rem;
+  padding: 0.65rem;
+  color: #e8f5e9;
+  background: var(--form-bg);
+  border: 2px solid var(--form-border);
+  border-radius: 10px;
+}
+
+.dev-toolbar,
+.dev-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin: 0.8rem 0;
+}
+
+.dev-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dev-list li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--accent-dim);
+}
+
+.dev-wish {
+  margin: 0 0 0.35rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .actor-stage,
+  .actor-stage.phase-rest,
+  .actor-stage.phase-request_ready,
+  .actor-stage.is-fighting,
+  .actor-stage.jump-jump,
+  .actor-stage.jump-land {
+    left: 22%;
+    transform: none;
+  }
+}
