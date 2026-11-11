@@ -21,10 +21,12 @@ export default function Scene({
   const victoryPhase = battle.victoryPhase;
   const inBattle = battle.status !== "idle";
   const inUltimate = battle.status === "ultimate" || Boolean(ultimatePhase);
+  const dancing = battle.status === "dancing";
   const celebrating = battle.status === "celebrate" || Boolean(victoryPhase);
   const onField =
     ["ready", "land"].includes(jumpPhase) ||
     battle.status === "running" ||
+    dancing ||
     battle.status === "intro" ||
     celebrating ||
     (inUltimate && ["awaken", "strike"].includes(ultimatePhase));
@@ -80,6 +82,7 @@ export default function Scene({
           ultimatePhase ? `ultimate-${ultimatePhase}` : "",
           victoryPhase ? `celebrate-${victoryPhase}` : "",
           onField ? "is-fighting" : "",
+          dancing ? "is-dancing" : "",
           idle ? "is-idle" : "",
         ].join(" ")}
       >

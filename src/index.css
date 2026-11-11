@@ -255,6 +255,43 @@ body {
   transform: translateX(-50%);
 }
 
+.actor-stage.is-dancing {
+  left: 50%;
+  bottom: 20%;
+  width: min(34vw, 210px);
+  transform: translateX(-50%);
+}
+
+.actor-stage.is-dancing .knight-rig {
+  transform-origin: 50% 90%;
+  animation: knight-dance 0.7s ease-in-out infinite;
+}
+
+.actor-stage.is-dancing .arm-l {
+  transform-origin: 80% 10%;
+  animation: dance-arm-left 0.7s ease-in-out infinite alternate;
+}
+
+.actor-stage.is-dancing .arm-sword {
+  transform-origin: 20% 10%;
+  animation: dance-arm-right 0.7s ease-in-out infinite alternate;
+}
+
+.actor-stage.is-dancing .leg-l {
+  transform-origin: 70% 0%;
+  animation: dance-leg-left 0.7s ease-in-out infinite alternate;
+}
+
+.actor-stage.is-dancing .leg-r {
+  transform-origin: 30% 0%;
+  animation: dance-leg-right 0.7s ease-in-out infinite alternate;
+}
+
+.actor-stage.is-dancing .cape,
+.actor-stage.is-dancing .scarf {
+  animation: cape-walk 0.7s ease-in-out infinite;
+}
+
 .knight-svg {
   width: 100%;
   height: auto;
@@ -1482,6 +1519,31 @@ body {
   0% { transform: translateY(0); }
   40% { transform: translateY(-36px); }
   100% { transform: translateY(0); }
+}
+
+@keyframes knight-dance {
+  0%, 100% { transform: translateY(0) rotate(-7deg); }
+  50% { transform: translateY(-10px) rotate(7deg); }
+}
+
+@keyframes dance-arm-left {
+  from { transform: rotate(-52deg); }
+  to { transform: rotate(38deg); }
+}
+
+@keyframes dance-arm-right {
+  from { transform: rotate(38deg); }
+  to { transform: rotate(-48deg); }
+}
+
+@keyframes dance-leg-left {
+  from { transform: rotate(12deg); }
+  to { transform: rotate(-16deg); }
+}
+
+@keyframes dance-leg-right {
+  from { transform: rotate(-12deg); }
+  to { transform: rotate(16deg); }
 }
 
 @keyframes heart-in {

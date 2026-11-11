@@ -7,6 +7,7 @@ import {
   usesNormalAttackScript,
 } from "../../shared/battlePlan.js";
 import { validateRequest } from "../../shared/validateRequest.js";
+import { hasDanceCommand } from "../../shared/detectDance.js";
 
 const CONTACT_MS = { 0: 270, 1: 330, 2: 310 };
 const RECOVER_MS = { 0: 540, 1: 600, 2: 560 };
@@ -258,6 +259,7 @@ export function useBattle() {
 
       if (
         status === "loading" ||
+        status === "dancing" ||
         status === "approach" ||
         status === "running" ||
         status === "intro" ||
@@ -289,6 +291,13 @@ export function useBattle() {
       setHitId(null);
       setAttacking(false);
       setShowBattleSpeech(false);
+
+      if (hasDanceCommand(validation.text)) {
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        setStatus("dancing");
+        later(() => setStatus("complete"), reduced ? 80 : 4000);
+        return;
+      }
 
       const result = await resolveBattle(validation.text);
       if (!mounted.current) {
